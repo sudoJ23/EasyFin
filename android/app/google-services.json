@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "825131519623",
+    "project_id": "easyfin-b992b",
+    "storage_bucket": "easyfin-b992b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825131519623:android:72bf605670aa8599803222",
+        "android_client_info": {
+          "package_name": "com.example.easyfin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvlatglj7mcclwWMuA18Pqg0OEVhwZtnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825131519623:android:e106677f01665646803222",
+        "android_client_info": {
+          "package_name": "com.j23.wallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvlatglj7mcclwWMuA18Pqg0OEVhwZtnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
