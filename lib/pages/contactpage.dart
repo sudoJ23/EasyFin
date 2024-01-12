@@ -2,9 +2,9 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:wallet/commons/socket_helper.dart';
-import 'package:wallet/entity/Transfer.dart';
-import 'package:wallet/entity/User.dart';
+import 'package:easyfin/commons/socket_helper.dart';
+import 'package:easyfin/entity/Transfer.dart';
+import 'package:easyfin/entity/User.dart';
 
 import '../entity/contact.dart';
 
