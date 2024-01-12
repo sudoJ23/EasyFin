@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:wallet/entity/Accounts.dart';
-import 'package:wallet/entity/User.dart';
-import 'package:wallet/commons/socket_helper.dart';
-import 'package:wallet/entity/transaction.dart';
-import 'package:wallet/entity/transactions.dart';
+import 'package:easyfin/entity/Accounts.dart';
+import 'package:easyfin/entity/User.dart';
+import 'package:easyfin/commons/socket_helper.dart';
+import 'package:easyfin/entity/transaction.dart';
+import 'package:easyfin/entity/transactions.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
