@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:wallet/commons/socket_helper.dart';
-import 'package:wallet/entity/Accounts.dart';
-import 'package:wallet/entity/Transfer.dart';
-import 'package:wallet/entity/User.dart';
-import 'package:wallet/entity/receiptresponse.dart';
-import 'package:wallet/widgets/keypad.dart';
+import 'package:easyfin/commons/socket_helper.dart';
+import 'package:easyfin/entity/Accounts.dart';
+import 'package:easyfin/entity/Transfer.dart';
+import 'package:easyfin/entity/User.dart';
+import 'package:easyfin/entity/receiptresponse.dart';
+import 'package:easyfin/widgets/keypad.dart';
 
 class PinConfirmationPage extends StatefulWidget {
   const PinConfirmationPage({super.key});
