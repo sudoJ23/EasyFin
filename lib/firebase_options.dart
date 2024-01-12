@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBvlatglj7mcclwWMuA18Pqg0OEVhwZtnQ',
-    appId: '1:825131519623:android:72bf605670aa8599803222',
+    appId: '1:825131519623:android:e106677f01665646803222',
     messagingSenderId: '825131519623',
     projectId: 'easyfin-b992b',
     storageBucket: 'easyfin-b992b.appspot.com',
@@ -63,19 +63,19 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBj4HWzxhzJPHf_DawusV33YGPw0hp0Zco',
-    appId: '1:825131519623:ios:5c43d5c6d75609ea803222',
+    appId: '1:825131519623:ios:f76f22ee3a3e400f803222',
     messagingSenderId: '825131519623',
     projectId: 'easyfin-b992b',
     storageBucket: 'easyfin-b992b.appspot.com',
-    iosBundleId: 'com.example.easyfin',
+    iosBundleId: 'com.example.wallet',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyBj4HWzxhzJPHf_DawusV33YGPw0hp0Zco',
-    appId: '1:825131519623:ios:71c966c9c428003b803222',
+    appId: '1:825131519623:ios:47907d9141f51b59803222',
     messagingSenderId: '825131519623',
     projectId: 'easyfin-b992b',
     storageBucket: 'easyfin-b992b.appspot.com',
-    iosBundleId: 'com.example.easyfin.RunnerTests',
+    iosBundleId: 'com.example.wallet.RunnerTests',
   );
 }
