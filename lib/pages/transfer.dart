@@ -1,3 +1,4 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -418,3 +419,5 @@ class _TransferPageState extends State<TransferPage> {
     return nominal <= user.selectedAccount.balance;
   }
 }
+
+
