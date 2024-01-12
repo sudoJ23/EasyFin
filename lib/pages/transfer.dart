@@ -12,6 +12,7 @@ import 'package:easyfin/entity/User.dart';
 import 'package:easyfin/widgets/notemodal.dart';
 import 'package:easyfin/widgets/transfer_confirmation.dart';
 
+
 import '../entity/Accounts.dart';
 
 class TransferPage extends StatefulWidget {
