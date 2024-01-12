@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallet/commons/socket_helper.dart';
-import 'package:wallet/entity/Accounts.dart';
-import 'package:wallet/entity/User.dart';
+import 'package:easyfin/commons/socket_helper.dart';
+import 'package:easyfin/entity/Accounts.dart';
+import 'package:easyfin/entity/User.dart';
 
 class AccountDetail extends StatefulWidget {
   const AccountDetail({super.key});
