@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
-import 'package:wallet/commons/socket_helper.dart';
-import 'package:wallet/entity/contact.dart';
-import 'package:wallet/entity/Transfer.dart';
-import 'package:wallet/entity/User.dart';
-import 'package:wallet/widgets/notemodal.dart';
-import 'package:wallet/widgets/transfer_confirmation.dart';
+import 'package:easyfin/commons/socket_helper.dart';
+import 'package:easyfin/entity/contact.dart';
+import 'package:easyfin/entity/Transfer.dart';
+import 'package:easyfin/entity/User.dart';
+import 'package:easyfin/widgets/notemodal.dart';
+import 'package:easyfin/widgets/transfer_confirmation.dart';
 
 import '../entity/Accounts.dart';
 
