@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:wallet/commons/socket_helper.dart';
-import 'package:wallet/entity/User.dart';
+import 'package:easyfin/commons/socket_helper.dart';
+import 'package:easyfin/entity/User.dart';
 
 
 class AccountManagementPage extends StatefulWidget {
