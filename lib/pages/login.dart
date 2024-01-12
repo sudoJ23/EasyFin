@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wallet/commons/socket_helper.dart';
+import 'package:easyfin/commons/socket_helper.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:wallet/entity/User.dart';
+import 'package:easyfin/entity/User.dart';
 
-import 'package:wallet/auth/auth_service.dart';
+import 'package:easyfin/auth/auth_service.dart';
 
 import '../entity/Accounts.dart';
 
