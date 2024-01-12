@@ -4,11 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:easyfin/commons/socket_helper.dart';
-import 'package:easyfin/entity/Accounts.dart';
+import 'package:easyfin/entity/accounts.dart';
 import 'package:easyfin/entity/Transfer.dart';
 import 'package:easyfin/entity/User.dart';
 import 'package:easyfin/entity/receiptresponse.dart';
-import 'package:easyfin/widgets/keypad.dart';
 
 class PinConfirmationPage extends StatefulWidget {
   const PinConfirmationPage({super.key});
@@ -19,7 +18,6 @@ class PinConfirmationPage extends StatefulWidget {
 
 class _PinConfirmationPageState extends State<PinConfirmationPage> {
 
-  // int _pinCurrentIndex = 0;
   final Container _inactivePin = Container(
     height: 15,
     width: 15,
@@ -42,7 +40,7 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
     ),
   );
 
-  List<Container> _pins = [];
+  final List<Container> _pins = [];
   final List<Container> _inCorrectPins = [
     Container(
       height: 15,
@@ -167,10 +165,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "1",
@@ -188,10 +184,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "2",
@@ -209,10 +203,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "3",
@@ -235,10 +227,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "4",
@@ -256,10 +246,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "5",
@@ -277,10 +265,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "6",
@@ -303,10 +289,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "7",
@@ -324,10 +308,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "8",
@@ -345,10 +327,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "9",
@@ -384,10 +364,8 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          // height: 50,
                           width: 50,
                           margin: const EdgeInsets.all(20),
-                          // color: Colors.red,
                           child: const Center(
                             child: Text(
                               "0",
@@ -402,10 +380,9 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            if (pin.length > 0) {
+                            if (pin.isNotEmpty) {
                               pin = pin.substring(0, pin.length - 1);
                               _pins[pin.length] = _inactivePin;
-                              print(pin);
                             }
                           });
                         },
@@ -431,7 +408,6 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
 
   void checkPin(num number) {
     if (pin.length < 6) {
-      print(pin.length);
       setState(() {
         _pins[pin.length] = _activePin;
         pin += number.toString();
@@ -451,7 +427,6 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
             };
             SocketManager.shared.socket?.emit("transfer", request);
             SocketManager.shared.socket?.once("transfer", (data) => {
-              print(data),
               if (data["message"] == "success") {
                 SocketManager.shared.socket?.emit("getTransactions", user.customerID),
                 SocketManager.shared.socket?.emit("getUser", user.uid),
@@ -464,7 +439,6 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                 Navigator.pushReplacementNamed(context, '/transfer/success', arguments: ReceiptResponse(data["response"]["timestamp"], data["response"]["amount"]))
               }
             });
-            // Navigator.pushReplacementNamed(context, '/transfer/success');
           } else {
             pinIncorrect = true;
             Future.delayed(const Duration(seconds: 2), () {
@@ -477,11 +451,15 @@ class _PinConfirmationPageState extends State<PinConfirmationPage> {
                 }
               });
             });
-            print("Incorrect");
+            if (kDebugMode) {
+              print("Incorrect");
+            }
           }
         });
       }
-      print(pin);
+      if (kDebugMode) {
+        print(pin);
+      }
     }
   }
 }

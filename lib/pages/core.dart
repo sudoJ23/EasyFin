@@ -19,7 +19,6 @@ class CorePage extends StatefulWidget {
 }
 
 class _CorePageState extends State<CorePage> {
-  // bool isAccountsLoaded = false;
   int _currentIndex = 0;
   final List<Widget> _children = [
     const HomePage(),
@@ -50,12 +49,24 @@ class _CorePageState extends State<CorePage> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            print(index);
+            if (GlobalVariable.qrViewController != null) {
+              GlobalVariable.qrViewController?.pauseCamera();
+            }
+
             if (index == 1) {
               if (!GlobalVariable.isAccountsLoaded) {
-                print(user.customerID);
                 SocketManager.shared.socket?.emit("getAccounts", user.customerID);
                 GlobalVariable.customerID = user.customerID;
+              }
+            }
+
+            if (index == 2) {
+              if (GlobalVariable.qrViewController != null) {
+                GlobalVariable.qrViewController?.resumeCamera();
+              }
+            } else {
+              if (GlobalVariable.qrViewController != null) {
+                GlobalVariable.qrViewController?.pauseCamera();
               }
             }
           });

@@ -14,7 +14,7 @@ class NewContactPage extends StatefulWidget {
 class _NewContactPageState extends State<NewContactPage> {
 
   final TextEditingController _emailController = TextEditingController();
-  Contact foundContact = Contact("", "", "", "", "");
+  Contact foundContact = Contact("", "", "", "", "", "");
 
   void showMessage(String title, String content, BuildContext context) {
     showDialog(
@@ -94,11 +94,9 @@ class _NewContactPageState extends State<NewContactPage> {
                         GestureDetector(
                           onTap: () {
                             if (_emailController.text != "") {
-                              print("Searching ${_emailController.text}");
                               SocketManager.shared.socket?.once("findEmail", (data) => {
-                                // data["message"] == "found" ? data["data"][0]["name"] : "Tidak ditemukan"
                                 if (data["message"] == "found") {
-                                  foundContact = Contact(data["data"][0]["id"], data["data"][0]["firstName"], data["data"][0]["lastName"], data["data"][0]["email"], data["data"][0]["customerID"])
+                                  foundContact = Contact(data["data"][0]["id"], data["data"][0]["firstName"], data["data"][0]["lastName"], data["data"][0]["email"], data["data"][0]["customerID"], "")
                                 },
                                 showModalBottomSheet(
                                   context: context,
@@ -133,9 +131,6 @@ class _NewContactPageState extends State<NewContactPage> {
                                             ),
                                           ),
                                           const SizedBox(height: 20,),
-                                          // Container(
-                                          //   child: ,
-                                          // ),
                                           Row(
                                             crossAxisAlignment: CrossAxisAlignment.end,
                                             textDirection: TextDirection.rtl,
@@ -190,7 +185,6 @@ class _NewContactPageState extends State<NewContactPage> {
                                     } else if (value == "contact has been saved") {
                                       showMessage("Peringatan", "Kontak telah ada", context);
                                     }
-                                    // Navigator.pop(context, "new contact");
                                   }
                                 })
                               });

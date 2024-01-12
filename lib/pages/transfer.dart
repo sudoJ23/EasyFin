@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,8 +11,7 @@ import 'package:easyfin/entity/User.dart';
 import 'package:easyfin/widgets/notemodal.dart';
 import 'package:easyfin/widgets/transfer_confirmation.dart';
 
-
-import '../entity/Accounts.dart';
+import '../entity/accounts.dart';
 
 class TransferPage extends StatefulWidget {
   const TransferPage({super.key});
@@ -25,7 +23,7 @@ class TransferPage extends StatefulWidget {
 class _TransferPageState extends State<TransferPage> {
   Accounts _selectedAccount = Accounts("", "", "", 0, "", "", "", "", "");
   final bool isLoading = true;
-  late Contact data = Contact("", "", "", "", "",);
+  late Contact data = Contact("", "", "", "", "", "");
   final List<Accounts> _accounts = [];
   final TextEditingController _nominalController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -46,7 +44,6 @@ class _TransferPageState extends State<TransferPage> {
     _nominalController.text = "0";
     _focusNode.requestFocus();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // This will be called after the first build
       data = ModalRoute.of(context)!.settings.arguments as Contact;
       if (kDebugMode) {
         print(data.id);
@@ -73,18 +70,10 @@ class _TransferPageState extends State<TransferPage> {
         })
       });
     });
-    // data = ModalRoute.of(context)!.settings.arguments as Contact;
-    // print(data);
-    // SocketManager.shared.socket?.emit("getAccounts", data.customerID);
-    // SocketManager.shared.socket?.once("getAccounts", (result) => {
-    //   print(result)
-    // });
-    // super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // data = ModalRoute.of(context)!.settings.arguments as Contact;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -109,16 +98,6 @@ class _TransferPageState extends State<TransferPage> {
               ),
               child: Column(
                 children: [
-                  // Text(
-                  //   data.name,
-                  //   style: const TextStyle(
-                  //     color: Colors.white,
-                  //     fontFamily: 'Poppins',
-                  //     fontWeight: FontWeight.w400,
-                  //     fontSize: 18
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 20,),
                   Text(
                     "Rekening",
                     style: TextStyle(
@@ -420,5 +399,3 @@ class _TransferPageState extends State<TransferPage> {
     return nominal <= user.selectedAccount.balance;
   }
 }
-
-

@@ -7,7 +7,7 @@ import 'package:easyfin/entity/User.dart';
 
 import 'package:easyfin/auth/auth_service.dart';
 
-import '../entity/Accounts.dart';
+import '../entity/accounts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -93,10 +93,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20,),
-                  // TextButton(
-                  //   onPressed: () {},
-                  //   child: Text("Forgot Password?", style: Theme.of(context).textTheme.bodyText1),
-                  // )
                 ],
               ),
               Column(
@@ -110,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
                       }
 
                       if (message!.user!.uid.isNotEmpty) {
-                        // print(FirebaseAuth.instance.currentUser!.uid);
                         SocketManager.shared.socket?.once("getUser", (data) => {
                           user.customerID = data["customerID"],
                           user.email = data["email"],
@@ -133,23 +128,13 @@ class _LoginPageState extends State<LoginPage> {
                             print(data["accounts"][i]),
                           },
                           user.selectedAccount = user.accounts[0],
-                          // user.customerID = data["customerID"],
-                          // user.email = data["email"],
-                          // user.name = data["name"],
-                          // user.firstName = data["firstName"],
-                          // user.lastName = data["lastName"],
-                          // Navigator.push(context, MaterialPageRoute(builder: (context) => Scaffold(body: Text("Tes"),),))
                         });
                         socket!.emit("getUser", FirebaseAuth.instance.currentUser?.uid);
-                        // await Future.delayed(const Duration(seconds: 1));
-                        // if (!context.mounted) return;
-                        // Navigator.pushReplacementNamed(context, '/home');
                       } else {
                         if (kDebugMode) {
                           print("Gagal login");
                         }
                       }
-                      // socket?.emit("checkPassword", {'email': _emailTextController.text, 'password': _passwordTextController.text});
                     },
                     elevation: 0,
                     padding: const EdgeInsets.all(18),
@@ -164,7 +149,6 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, '/signup');
-                      // Navigator.push(context, MaterialPageRoute(builder: (context()));
                     },
                     child: Text("Create account", style: Theme.of(context).textTheme.bodyText1,),
                   )

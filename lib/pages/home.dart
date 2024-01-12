@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:easyfin/entity/Accounts.dart';
+import 'package:easyfin/entity/accounts.dart';
 import 'package:easyfin/entity/User.dart';
 import 'package:easyfin/commons/socket_helper.dart';
 import 'package:easyfin/entity/transaction.dart';
@@ -18,27 +18,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   Color mainColor = const Color.fromRGBO(52, 90, 251, 1);
-  // ignore: unused_field
-  bool _isScrolled = false;
   String _name = "";
   User? uid = FirebaseAuth.instance.currentUser;
   Accounts _selectedAccount = user.selectedAccount;
   String _timeOfDay = "Pagi";
-  NumberFormat currencyFormatter =
-      NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0);
+  NumberFormat currencyFormatter = NumberFormat.currency(
+    locale: 'id',
+    symbol: '',
+    decimalDigits: 0
+  );
   String balanceDisplay = "";
   bool showBalance = true;
-
-  // final List<Transaction> _transactions = [];
-
-  // final List<dynamic> _transactions = [
-  //   ['Amazon', '6:25pm', '-53.000', Colors.grey, Colors.red, Iconsax.arrow_up_3],
-  //   ['Cash from ATM', '5:50pm', '-100.000', Colors.grey, Colors.red, Iconsax.arrow_up_3],
-  //   ['Netflix', '2:22pm', '-90.000', Colors.grey, Colors.red, Iconsax.arrow_up_3],
-  //   ['Transfer', '5:50pm', '80.000', Colors.green, Colors.green, Iconsax.arrow_down],
-  // ];
 
   String determineTimeOfDay() {
     DateTime now = DateTime.now();
@@ -57,110 +49,75 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    SocketManager.shared.socket
-        ?.emit("getUser", FirebaseAuth.instance.currentUser?.uid);
+    SocketManager.shared.socket?.emit("getUser", FirebaseAuth.instance.currentUser?.uid);
     SocketManager.shared.socket?.on("getTransactions", (data) {
       Transactions.list.clear();
       for (var i = 0; i < data.length; i++) {
         Transactions.list.add(Transaction(
-            data[i]["id"],
-            data[i]["transactionType"],
-            data[i]["sender"],
-            data[i]["receiver"],
-            data[i]["dateIssued"],
-            int.parse(data[i]["amount"]),
-            data[i]["direction"]));
+          data[i]["id"],
+          data[i]["transactionType"],
+          data[i]["sender"],
+          data[i]["receiver"],
+          data[i]["dateIssued"],
+          int.parse(data[i]["amount"]),
+          data[i]["direction"]
+        ));
       }
-      // print(Transactions.list[0].sender);
     });
-    SocketManager.shared.socket?.on(
-        "getUser",
-        (data) => {
-              print("get new data"),
-              user.uid = data["id"],
-              user.customerID = data["customerID"],
-              user.email = data["email"],
-              user.name = data["name"],
-              user.firstName = data["firstName"],
-              user.lastName = data["lastName"],
-              user.accounts.clear(),
-              for (var i = 0; i < data["accounts"].length; i++)
-                {
-                  user.accounts.add(Accounts(
-                      data["accounts"][i]["id"],
-                      data["accounts"][i]["name"],
-                      data["accounts"][i]["customer_id"],
-                      int.parse(data["accounts"][i]["balance"]),
-                      data["accounts"][i]["account_status"],
-                      data["accounts"][i]["account_type"],
-                      data["accounts"][i]["currency"],
-                      data["accounts"][i]["pancard_no"],
-                      data["accounts"][i]["pin"])),
-                },
-              user.selectedAccount = user.accounts[0],
-              SocketManager.shared.socket
-                  ?.emit("getTransactions", user.customerID),
-              setState(() {
-                if (showBalance) {
-                  balanceDisplay =
-                      currencyFormatter.format(_selectedAccount.balance);
-                } else {
-                  balanceDisplay = "*******";
-                }
-                _name = user.name;
-                _selectedAccount = user.selectedAccount;
-                if (showBalance) {
-                  balanceDisplay =
-                      currencyFormatter.format(_selectedAccount.balance);
-                } else {
-                  balanceDisplay = "*******";
-                }
-              })
-            });
-    // setState(() {
-    //   if (showBalance) {
-    //     balanceDisplay = currencyFormatter.format(_selectedAccount.balance);
-    //   } else {
-    //     balanceDisplay = "*******";
-    //   }
-    // });
+    SocketManager.shared.socket?.on("getUser", (data) => {
+      user.uid = data["id"],
+      user.customerID = data["customerID"],
+      user.email = data["email"],
+      user.name = data["name"],
+      user.firstName = data["firstName"],
+      user.lastName = data["lastName"],
+      user.accounts.clear(),
+      for (var i = 0; i < data["accounts"].length; i++) {
+        user.accounts.add(Accounts(
+          data["accounts"][i]["id"],
+          data["accounts"][i]["name"],
+          data["accounts"][i]["customer_id"],
+          int.parse(data["accounts"][i]["balance"]),
+          data["accounts"][i]["account_status"],
+          data["accounts"][i]["account_type"],
+          data["accounts"][i]["currency"],
+          data["accounts"][i]["pancard_no"],
+          data["accounts"][i]["pin"]
+        )),
+      },
+      user.selectedAccount = user.accounts[0],
+      SocketManager.shared.socket?.emit("getTransactions", user.customerID),
+      if (mounted) {
+        setState(() {
+          if (showBalance) {
+            balanceDisplay = currencyFormatter.format(_selectedAccount.balance);
+          } else {
+            balanceDisplay = "*******";
+          }
+          _name = user.name;
+          _selectedAccount = user.selectedAccount;
+          if (showBalance) {
+            balanceDisplay = currencyFormatter.format(_selectedAccount.balance);
+          } else {
+            balanceDisplay = "*******";
+          }
+        })
+      }
+    });
     _scrollController.addListener(_listenToScrollChange);
     _timeOfDay = determineTimeOfDay();
-
-    // socket?.on("topup", (data) {
-    //   if (kDebugMode) {
-    //     print("Top Up ++");
-    //   }
-    //   setState(() {
-    //     _selectedAccount.balance = _selectedAccount.balance + data["balance"];
-
-    //     if (showBalance) {
-    //       balanceDisplay = currencyFormatter.format(_selectedAccount.balance);
-    //     } else {
-    //       balanceDisplay = "*******";
-    //     }
-    //   });
-    // });
     super.initState();
   }
 
   void _listenToScrollChange() {
     if (_scrollController.offset >= 100.0) {
       setState(() {
-        _isScrolled = true;
       });
     } else {
       setState(() {
-        _isScrolled = false;
       });
     }
   }
-
-  // @override
-  // void dispose() {
-  //   socket.disconnect();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -183,63 +140,51 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     "Selamat $_timeOfDay",
                     style: const TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
                   Text(
                     _name,
                     style: const TextStyle(
-                        color: Color.fromRGBO(52, 90, 251, 1),
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal),
+                      color: Color.fromRGBO(52, 90, 251, 1),
+                      fontFamily: 'Poppins',
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal
+                    ),
                   )
                 ],
               ),
             ),
-            // actions: [
-            //   IconButton(
-            //     icon: Icon(Iconsax.notification, color: Colors.grey.shade700),
-            //     onPressed: () => showDialog(
-            //       context: context,
-            //       builder: (context) => AlertDialog(
-            //         title: const Text("No notification"),
-            //         content: const Text("You have 0 notification"),
-            //         actions: <Widget>[
-            //           TextButton(
-            //             onPressed: () => Navigator.pop(context),
-            //             child: const Center(child: Text("Close")),
-            //           )
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ],
             centerTitle: false,
           ),
-          SliverList(
-              delegate: SliverChildListDelegate([
+          SliverList(delegate: SliverChildListDelegate([
             Container(
               decoration: const ShapeDecoration(
-                  color: Color.fromRGBO(52, 90, 251, 1),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)))),
+                color: Color.fromRGBO(52, 90, 251, 1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10)
+                  )
+                )
+              ),
               margin: const EdgeInsets.all(20),
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
                   Row(
                     children: [
-                      const Text(
-                        "Saldo",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Poppins',
-                            fontStyle: FontStyle.normal,
-                            fontSize: 16),
+                     const Text(
+                      "Saldo",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Poppins',
+                        fontStyle: FontStyle.normal,
+                        fontSize: 16
                       ),
+                     ),
                       IconButton(
                         onPressed: () {
                           setState(() {
@@ -247,8 +192,7 @@ class _HomePageState extends State<HomePage> {
                               balanceDisplay = "*******";
                               showBalance = false;
                             } else {
-                              balanceDisplay = currencyFormatter
-                                  .format(_selectedAccount.balance);
+                              balanceDisplay = currencyFormatter.format(_selectedAccount.balance);
                               showBalance = true;
                             }
                           });
@@ -266,27 +210,28 @@ class _HomePageState extends State<HomePage> {
                         const Text(
                           "Rp  ",
                           style: TextStyle(
-                              color: Color.fromRGBO(216, 216, 216, 1),
-                              fontFamily: 'Poppins',
-                              fontSize: 32),
+                            color: Color.fromRGBO(216, 216, 216, 1),
+                            fontFamily: 'Poppins',
+                            fontSize: 32
+                          ),
                         ),
                         Text(
                           balanceDisplay,
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Poppins',
-                              fontSize: 32),
+                            color: Colors.white,
+                            fontFamily: 'Poppins',
+                            fontSize: 32
+                          ),
                         )
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20,),
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5)),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5)
+                    ),
                     padding: const EdgeInsets.all(8),
                     child: Column(
                       children: [
@@ -300,135 +245,119 @@ class _HomePageState extends State<HomePage> {
                                   user.selectedAccount.name,
                                   textAlign: TextAlign.left,
                                   style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16
+                                  ),
                                 ),
                                 Text(
                                   user.selectedAccount.pancard,
                                   style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.w700),
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.w700
+                                  ),
                                 )
                               ],
                             ),
                             TextButton(
-                                onPressed: () => showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: const Text(
-                                          "Pilih rekening",
-                                          style: TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        content: SizedBox(
-                                          height: 200,
-                                          child: ListView.builder(
-                                            itemCount: user.accounts.length,
-                                            itemBuilder: (context, index) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  if (kDebugMode) {
-                                                    print(
-                                                        "Kartu yang ini ${user.accounts[index].balance}");
-                                                    print(user.accounts[index]
-                                                        .pancard);
-                                                  }
-                                                  setState(() {
-                                                    _selectedAccount =
-                                                        user.accounts[index];
-                                                    user.selectedAccount =
-                                                        user.accounts[index];
-                                                    if (showBalance) {
-                                                      balanceDisplay =
-                                                          currencyFormatter
-                                                              .format(
-                                                                  _selectedAccount
-                                                                      .balance);
-                                                    } else {
-                                                      balanceDisplay =
-                                                          "*******";
-                                                    }
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Container(
-                                                  height: 70,
-                                                  decoration: BoxDecoration(
-                                                      color: mainColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
-                                                  margin: const EdgeInsets.only(
-                                                    left: 2,
-                                                    right: 2,
-                                                    top: 10,
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10, top: 10),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        user.accounts[index]
-                                                            .name,
-                                                        style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                'Poppins',
-                                                            fontSize: 17,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w300),
-                                                      ),
-                                                      Text(
-                                                        user.accounts[index]
-                                                            .pancard,
-                                                        style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                'Poppins',
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w300),
-                                                      ),
-                                                    ],
+                              onPressed: () => showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text(
+                                    "Pilih rekening",
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600
+                                    ),
+                                  ),
+                                  content: SizedBox(
+                                    height: 200,
+                                    child: ListView.builder(
+                                      itemCount: user.accounts.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (kDebugMode) {
+                                              print("Kartu yang ini ${user.accounts[index].balance}");
+                                              print(user.accounts[index].pancard);
+                                            }
+                                            setState(() {
+                                              _selectedAccount = user.accounts[index];
+                                              user.selectedAccount = user.accounts[index];
+                                              if (showBalance) {
+                                                balanceDisplay = currencyFormatter.format(_selectedAccount.balance);
+                                              } else {
+                                                balanceDisplay = "*******";
+                                              }
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                            height: 70,
+                                            decoration: BoxDecoration(
+                                              color: mainColor,
+                                              borderRadius: BorderRadius.circular(5)
+                                            ),
+                                            margin: const EdgeInsets.only(
+                                              left: 2,
+                                              right: 2,
+                                              top: 10,
+                                            ),
+                                            padding: const EdgeInsets.only(
+                                              left: 10,
+                                              top: 10
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  user.accounts[index].name,
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w300
                                                   ),
                                                 ),
-                                              );
-                                            },
+                                                Text(
+                                                  user.accounts[index].pancard,
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Poppins',
+                                                    fontWeight: FontWeight.w300
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        actions: <Widget>[
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                                child: const Text("Batal"),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                        );
+                                      },
                                     ),
-                                child: SizedBox(
-                                  child: const Text(
-                                    "Ubah",
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w700),
                                   ),
-                                ))
+                                  actions: <Widget>[
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: const Text("Batal"),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              child: const Text(
+                                "Ubah",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w700
+                                ),
+                              )
+                            )
                           ],
                         )
                       ],
@@ -439,79 +368,67 @@ class _HomePageState extends State<HomePage> {
             )
           ])),
           SliverList(
-              delegate: SliverChildListDelegate([
-            Container(
-              padding: const EdgeInsets.only(top: 20),
-              height: 115,
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
+            delegate: SliverChildListDelegate([
+              Container(
+                padding: const EdgeInsets.only(top: 20),
+                height: 115,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
                             width: 60,
                             height: 60,
                             decoration: BoxDecoration(
-                                color: Colors.grey.shade900,
-                                borderRadius: BorderRadius.circular(20)),
+                              color: Colors.grey.shade900,
+                              borderRadius: BorderRadius.circular(20)
+                            ),
                             child: IconButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/contact')
-                                    .then((value) {
-                                  print(value);
-                                });
+                                Navigator.pushNamed(context, '/contact');
                               },
-                              icon: const Icon(Iconsax.export_1,
-                                  color: Colors.white, size: 25),
-                            )),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "Transfer",
-                          style: TextStyle(
-                              color: Colors.grey.shade800, fontSize: 12),
-                        )
-                      ],
+                              icon: const Icon(Iconsax.export_1, color: Colors.white, size: 25),
+                            )
+                          ),
+                          const SizedBox(height: 10,),
+                          Text("Transfer", style: TextStyle(color: Colors.grey.shade800, fontSize: 12),)
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
+                    Container(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
                               color: Colors.grey.shade900,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: IconButton(
-                              onPressed: () {
+                              borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: IconButton(
+                              onPressed:() {
                                 Navigator.pushNamed(context, '/qr');
                               },
-                              icon: const Icon(Iconsax.scan_barcode,
-                                  color: Colors.white, size: 25)),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "Share",
-                          style: TextStyle(
-                              color: Colors.grey.shade800, fontSize: 12),
-                        )
-                      ],
+                              icon: const Icon(Iconsax.scan_barcode, color: Colors.white, size: 25)
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
+                          Text("Share", style: TextStyle(color: Colors.grey.shade800, fontSize: 12),)
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ])),
+            ])
+          ),
           SliverFillRemaining(
             fillOverscroll: true,
             child: Container(
@@ -519,27 +436,24 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Transaksi Terakhir',
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Transaksi Terakhir', style: TextStyle(color: Colors.grey.shade800, fontSize: 14, fontWeight: FontWeight.w600),),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/history');
+                        },
+                        child: Text(
+                          'Selengkapnya',
                           style: TextStyle(
-                              color: Colors.grey.shade800,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/history');
-                            },
-                            child: Text(
-                              'Selengkapnya',
-                              style: TextStyle(
-                                  color: Colors.grey.shade600,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600),
-                            )),
-                      ]),
+                            color: Colors.grey.shade600,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600
+                          ),
+                        )
+                      ),
+                    ]
+                  ),
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.only(top: 20),
@@ -556,13 +470,9 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: Container(
                               margin: const EdgeInsets.only(bottom: 10),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                               decoration: BoxDecoration(
-                                color: Transactions.list[index].direction ==
-                                        "in"
-                                    ? Colors.green
-                                    : const Color.fromARGB(255, 236, 145, 139),
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
                                   BoxShadow(
@@ -574,43 +484,18 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            Transactions
-                                                .list[index].transactionType
-                                                .toUpperCase(),
-                                            style: TextStyle(
-                                                color: Colors.grey.shade900,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14),
-                                          ),
-                                          const SizedBox(
-                                            height: 2,
-                                          ),
-                                          Text(
-                                            Transactions.list[index].receiver,
-                                            style: TextStyle(
-                                                color: Colors.grey.shade700,
-                                                fontSize: 14),
-                                          ),
-                                          const SizedBox(
-                                            height: 2,
-                                          ),
-                                          Text(
-                                            Transactions.list[index].dateIssued,
-                                            style: TextStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 36, 35, 35),
-                                                fontSize: 12),
-                                          ),
+                                          Text(Transactions.list[index].transactionType.toUpperCase(), style: TextStyle(color: Colors.grey.shade900, fontWeight: FontWeight.w500, fontSize: 14),),
+                                          const SizedBox(height: 2,),
+                                          Text(Transactions.list[index].receiver, style: TextStyle(color: Colors.grey.shade700, fontSize: 14),),
+                                          const SizedBox(height: 2,),
+                                          Text(Transactions.list[index].dateIssued, style: TextStyle(color: Colors.grey.shade500, fontSize: 12),),
                                         ],
                                       ),
                                     ],
@@ -618,35 +503,18 @@ class _HomePageState extends State<HomePage> {
                                   Row(
                                     children: [
                                       Text(
-                                        Transactions.list[index].direction ==
-                                                "in"
-                                            ? currencyFormatter.format(
-                                                Transactions.list[index].amount)
-                                            : "-${currencyFormatter.format(Transactions.list[index].amount)}",
+                                        Transactions.list[index].direction == "in" ? currencyFormatter.format(Transactions.list[index].amount) : "-${currencyFormatter.format(Transactions.list[index].amount)}",
                                         style: TextStyle(
-                                            color: Transactions.list[index]
-                                                        .direction ==
-                                                    "in"
-                                                ? Colors.green
-                                                : const Color.fromARGB(
-                                                    255, 50, 45, 45),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700),
+                                          color: Transactions.list[index].direction == "in" ? Colors.green : Colors.grey,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700
+                                        ),
                                       ),
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(
-                                              Transactions.list[index]
-                                                          .direction ==
-                                                      "in"
-                                                  ? Iconsax.arrow_down
-                                                  : Iconsax.arrow_up_3,
-                                              color: Transactions.list[index]
-                                                          .direction ==
-                                                      "in"
-                                                  ? Colors.green
-                                                  : Colors.red,
-                                              size: 25))
+                                      Icon(
+                                        Transactions.list[index].direction == "in" ? Iconsax.arrow_down : Iconsax.arrow_up_3,
+                                        color: Transactions.list[index].direction == "in" ? Colors.green : Colors.red,
+                                        size: 25
+                                      )
                                     ],
                                   ),
                                 ],
@@ -666,4 +534,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

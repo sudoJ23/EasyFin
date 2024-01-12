@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
-import '../entity/transaction.dart';
 import '../entity/transactions.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -75,7 +74,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     },
                     child: Container(
                       margin: const EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
@@ -115,14 +114,19 @@ class _HistoryPageState extends State<HistoryPage> {
                                   fontWeight: FontWeight.w700
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Transactions.list[index].direction == "in" ? Iconsax.arrow_down : Iconsax.arrow_up_3,
-                                  color: Transactions.list[index].direction == "in" ? Colors.green : Colors.red,
-                                  size: 25
-                                )
+                              Icon(
+                                Transactions.list[index].direction == "in" ? Iconsax.arrow_down : Iconsax.arrow_up_3,
+                                color: Transactions.list[index].direction == "in" ? Colors.green : Colors.red,
+                                size: 25
                               )
+                              // IconButton(
+                              //   onPressed: () {},
+                              //   icon: Icon(
+                              //     Transactions.list[index].direction == "in" ? Iconsax.arrow_down : Iconsax.arrow_up_3,
+                              //     color: Transactions.list[index].direction == "in" ? Colors.green : Colors.red,
+                              //     size: 25
+                              //   )
+                              // )
                             ],
                           ),
                         ],

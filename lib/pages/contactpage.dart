@@ -1,5 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:easyfin/commons/socket_helper.dart';
@@ -20,7 +19,6 @@ class _ContactPageState extends State<ContactPage> {
   final List<Contact> _recentContacts = [];
   final List<Contact> _contacts = [
   ];
-  // final List<String> _contacts = [];
 
   final List<Contact> _filteredContact = [];
 
@@ -39,7 +37,7 @@ class _ContactPageState extends State<ContactPage> {
       _filteredContact.clear(),
       print(data),
       for (var c in data) {
-        _contacts.add(Contact(c["id"], c["first_name"], c["last_name"], c["email"], c["customerID"]))
+        _contacts.add(Contact(c["id"], c["first_name"], c["last_name"], c["email"], c["customerID"], c["pancard"]))
       },
       _contacts.sort((a, b) => a.firstName.compareTo(b.firstName)),
       _filteredContact.sort((a, b) => a.firstName.compareTo(b.firstName)),
@@ -221,7 +219,10 @@ class _ContactPageState extends State<ContactPage> {
                               child: const Icon(Iconsax.user),
                             ),
                             const SizedBox(width: 10,),
-                            Text("${_filteredContact[index].firstName} ${_filteredContact[index].lastName}", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),),
+                            Text(
+                              "${_filteredContact[index].firstName} ${_filteredContact[index].lastName}",
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            ),
                             const Spacer(),
                             IconButton(
                               icon: const Icon(Icons.arrow_forward_ios, color: Colors.black, size: 15,),

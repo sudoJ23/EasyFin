@@ -4,7 +4,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:easyfin/commons/socket_helper.dart';
-import 'package:easyfin/entity/Accounts.dart';
+import 'package:easyfin/entity/accounts.dart';
 import 'package:easyfin/entity/User.dart';
 
 class AccountDetail extends StatefulWidget {
@@ -15,7 +15,7 @@ class AccountDetail extends StatefulWidget {
 }
 
 class _AccountDetailState extends State<AccountDetail> {
-  Accounts account = Accounts("Tes", "", "", 0, "", "", "", "", "");
+  Accounts account = Accounts("Default", "", "", 0, "", "", "", "", "");
   String currentState = "";
   Codec<String, String> stringToBase64 = utf8.fuse(base64);
   final TextEditingController _namaController = TextEditingController();
@@ -34,7 +34,6 @@ class _AccountDetailState extends State<AccountDetail> {
       setState(() {
         account = ModalRoute.of(context)!.settings.arguments as Accounts;
       });
-      print(account.name);
     });
   }
 
