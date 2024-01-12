@@ -2,12 +2,12 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:wallet/commons/globalvariable.dart';
-import 'package:wallet/entity/User.dart';
-import 'package:wallet/pages/accountmanagement.dart';
-import 'package:wallet/pages/home.dart';
-import 'package:wallet/pages/profile.dart';
-import 'package:wallet/pages/scan.dart';
+import 'package:easyfin/commons/globalvariable.dart';
+import 'package:easyfin/entity/User.dart';
+import 'package:easyfin/pages/accountmanagement.dart';
+import 'package:easyfin/pages/home.dart';
+import 'package:easyfin/pages/profile.dart';
+import 'package:easyfin/pages/scan.dart';
 
 import '../commons/socket_helper.dart';
 
